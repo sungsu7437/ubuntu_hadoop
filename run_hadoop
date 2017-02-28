@@ -1,0 +1,49 @@
+#! /bin/bash
+
+NETWORK=$2
+
+MASTER_COMMAND="sudo docker run -it --name master --network $1 --ip 10.0.0.2 -p 8088:8088 -p 8042:8042 -p 8085:8080 -p 4040:4040 -p 7077:7077 -p 2022:22 --add-host=master:10.0.0.2"
+SLAVE_FRONT="sudo docker run -it --name"
+SLAVE_COMMAND=""
+COMMAND_LAST="sungsu7437/hadoop_ubuntu:16.04 /bin/bash"
+SLAVE="slave"
+ADDHOST='--add-host='
+IP="10.0.0."
+i=1
+j=1
+
+if [[ -z "$5" ]]; then
+	echo "format is wrong"
+	echo "./run_hadoop network-name want-master slave-from slave-to number-of-hosts"
+	echo "ex) ./run_hadoop my-net 0 1 5 10"
+	echo "network is my-net, need master container, slave from 1, slave to 5, number of hosts=10"
+	exit 0
+fi
+	
+
+
+if [ $2 == 0 ]; then
+	while [ $j != $5 ];
+	do
+		MASTER_COMMAND="$MASTER_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
+		j=$(($j+1))
+	done
+	MASTER_COMMAND="$MASTER_COMMAND $COMMAND_LAST"
+	$MASTER_COMMAND
+fi
+
+i=$3
+while [ $i != $(($4+1)) ];
+do
+	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --add-host=master:10.0.0.2"
+	j=1
+	while [ $j != $5 ];
+	do
+        	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
+       		j=$(($j+1))
+	done
+	$SLAVE_COMMAND $COMMAND_LAST
+	SLAVE_COMMAND=''
+	i=$(($i+1))
+done
+
