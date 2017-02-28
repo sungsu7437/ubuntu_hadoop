@@ -39,6 +39,7 @@ RUN mkdir -pv $HADOOP_PREFIX/dfs/name
 RUN mkdir -pv $HADOOP_PREFIX/dfs/data
 RUN mkdir -pv $HADOOP_PREFIX/tmp
 
+
 RUN cp $HADOOP_PREFIX/etc/hadoop/*.xml $HADOOP_PREFIX/input
 
 # pseudo distributed
