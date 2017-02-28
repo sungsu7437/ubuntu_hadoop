@@ -35,7 +35,7 @@ fi
 i=$3
 while [ $i != $(($4+1)) ];
 do
-	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --add-host=master:10.0.0.2"
+	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --storage-opt size=300G --add-host=master:10.0.0.2"
 	j=1
 	while [ $j != $5 ];
 	do
