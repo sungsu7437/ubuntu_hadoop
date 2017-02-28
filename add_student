@@ -2,7 +2,7 @@
 
 STUDENT_FRONT="sudo docker run -it --name"
 SLAVE_COMMAND=""
-COMMAND_LAST="sungsu7437/hadoop_ubuntu:16.04 /bin/bash"
+COMMAND_LAST="sungsu7437/ubuntu_hadoop /bin/bash"
 SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
