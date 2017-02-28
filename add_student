@@ -30,7 +30,7 @@ do
         	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
        		j=$(($j+1))
 	done
-	$SLAVE_COMMAND -p 2200$k:2200$k $COMMAND_LAST
+	$SLAVE_COMMAND -p 2200$k:2200$k --storage-opt size=500G $COMMAND_LAST
 	SLAVE_COMMAND=''
 	i=$(($i+1))
 	k=$(($k+1))
