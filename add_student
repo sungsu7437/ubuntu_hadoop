@@ -23,7 +23,7 @@ fi
 i=$2
 while [ $i != $(($3+1)) ];
 do
-	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$(($i+2)) --add-host=master:10.0.0.2"
+	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --add-host=master:10.0.0.2"
 	j=1
 	while [ $j != $4 ];
 	do
