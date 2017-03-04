@@ -7,6 +7,7 @@ SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
 STUDENTIP="10.0.0.10"
+STUDENTIP="10.0.0.1"
 i=1
 j=1
 k=1
@@ -25,7 +26,12 @@ fi
 i=$2
 while [ $i != $(($3+1)) ];
 do
-	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --memory 2g --add-host=master:10.0.0.2"
+	 if [ $i -lt 10 ]; then
+                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --memory 2g --add-host=master:10.0.0.2"
+        else
+                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP2$i --memory 2g --add-host=master:10.0.0.2"
+        fi
+
 	j=1
 	while [ $j != $(($4+1)) ];
 	do
