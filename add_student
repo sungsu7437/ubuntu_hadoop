@@ -6,8 +6,8 @@ COMMAND_LAST="sungsu7437/ubuntu_hadoop /bin/bash"
 SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
-STUDENTIP="10.0.0.10"
-STUDENTIP="10.0.0.1"
+STUDENTIP10="10.0.0.10"
+STUDENTIP1="10.0.0.1"
 i=1
 j=1
 k=1
@@ -27,9 +27,9 @@ i=$2
 while [ $i != $(($3+1)) ];
 do
 	 if [ $i -lt 10 ]; then
-                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --memory 2g --add-host=master:10.0.0.2"
+                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP10$i --memory 2g --add-host=master:10.0.0.2"
         else
-                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP2$i --memory 2g --add-host=master:10.0.0.2"
+                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP1$i --memory 2g --add-host=master:10.0.0.2"
         fi
 
 	j=1
@@ -40,17 +40,17 @@ do
 	done
 	
 	k=1
-	SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($l-1))*2))+40))"
+	SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($l-1))*2))+55))"
 	while [ $k != 2 ];
 	do
-		SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($l-1))*2))+40+$k))"		
+		SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($l-1))*2))+55-$k))"		
 		k=$(($k+1))
 	done
 
 	$SLAVE_COMMAND -p 2200$m:2200$m --storage-opt size=500G $COMMAND_LAST
 	SLAVE_COMMAND=''
 	i=$(($i+1))
-	l=$(($l+1))
+	l=$(($l-1))
 	m=$(($m+1))
 done
 
