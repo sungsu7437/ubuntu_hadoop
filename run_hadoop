@@ -5,7 +5,7 @@ NETWORK=$2
 MASTER_COMMAND="sudo docker run -it --name master --network $1 --ip 10.0.0.2 -p 8088:8088 -p 8042:8042 -p 8085:8080 -p 4040:4040 -p 7077:7077 -p 2022:22 --add-host=master:10.0.0.2 --cpuset-cpus=0,1,2,3 --memory 12g"
 SLAVE_FRONT="sudo docker run -it --name"
 SLAVE_COMMAND=""
-COMMAND_LAST="sungsu7437/hadoop_ubuntu:16.04 /bin/bash"
+COMMAND_LAST="sungsu7437/ubuntu_hadoop /bin/bash"
 SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
