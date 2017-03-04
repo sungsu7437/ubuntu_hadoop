@@ -2,16 +2,17 @@
 
 NETWORK=$2
 
-MASTER_COMMAND="sudo docker run -it --name master --network $1 --ip 10.0.0.2 -p 8088:8088 -p 8042:8042 -p 8085:8080 -p 4040:4040 -p 7077:7077 -p 2022:22 --add-host=master:10.0.0.2"
+MASTER_COMMAND="sudo docker run -it --name master --network $1 --ip 10.0.0.2 -p 8088:8088 -p 8042:8042 -p 8085:8080 -p 4040:4040 -p 7077:7077 -p 2022:22 --add-host=master:10.0.0.2 --cpuset-cpus=0,1,2,3 --memory 12g"
 SLAVE_FRONT="sudo docker run -it --name"
 SLAVE_COMMAND=""
-COMMAND_LAST="sungsu7437/ubuntu_hadoop /bin/bash"
+COMMAND_LAST="sungsu7437/hadoop_ubuntu:16.04 /bin/bash"
 SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
 i=1
 j=1
-
+k=1
+l=1
 if [[ -z "$5" ]]; then
 	echo "format is wrong"
 	echo "./run_hadoop network-name want-master slave-from slave-to number-of-hosts"
@@ -35,15 +36,34 @@ fi
 i=$3
 while [ $i != $(($4+1)) ];
 do
-	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --storage-opt size=300G --add-host=master:10.0.0.2"
+	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --memory 6g --storage-opt size=300G --add-host=master:10.0.0.2"
 	j=1
 	while [ $j != $5 ];
 	do
         	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
        		j=$(($j+1))
 	done
+
+        k=1
+	if [ $2 == 0 ]; then
+		SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($l-1))*3))+4))"
+       		while [ $k != 3 ];
+        	do
+                	SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($(($l-1))*3))+4))+$k))"
+                	k=$(($k+1))
+        	done
+	else
+		SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($l-1))*3))"
+                while [ $k != 3 ];
+                do
+                        SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($l-1))*3))+$k))"
+                        k=$(($k+1))
+                done
+	fi
+	
 	$SLAVE_COMMAND $COMMAND_LAST
 	SLAVE_COMMAND=''
 	i=$(($i+1))
+	l=$(($l+1))
 done
 

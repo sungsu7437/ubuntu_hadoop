@@ -2,14 +2,16 @@
 
 STUDENT_FRONT="sudo docker run -it --name"
 SLAVE_COMMAND=""
-COMMAND_LAST="sungsu7437/ubuntu_hadoop /bin/bash"
+COMMAND_LAST="sungsu7437/hadoop_ubuntu:16.04 /bin/bash"
 SLAVE="slave"
 ADDHOST='--add-host='
 IP="10.0.0."
 STUDENTIP="10.0.0.10"
 i=1
 j=1
-k=2
+k=1
+l=1
+m=2
 
 if [[ -z "$4" ]]; then
 	echo "format is wrong"
@@ -23,16 +25,26 @@ fi
 i=$2
 while [ $i != $(($3+1)) ];
 do
-	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --add-host=master:10.0.0.2"
+	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --memory 2g --add-host=master:10.0.0.2"
 	j=1
 	while [ $j != $4 ];
 	do
         	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
        		j=$(($j+1))
 	done
-	$SLAVE_COMMAND -p 2200$k:2200$k --storage-opt size=500G $COMMAND_LAST
+	
+	k=1
+	SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($l-1))*2))+40))"
+	while [ $k != 2 ];
+	do
+		SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($l-1))*2))+40+$k))"		
+		k=$(($k+1))
+	done
+
+	$SLAVE_COMMAND -p 2200$m:2200$m --storage-opt size=500G $COMMAND_LAST
 	SLAVE_COMMAND=''
 	i=$(($i+1))
-	k=$(($k+1))
+	l=$(($l+1))
+	m=$(($m+1))
 done
 
