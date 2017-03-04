@@ -27,7 +27,7 @@ while [ $i != $(($3+1)) ];
 do
 	SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP$i --memory 2g --add-host=master:10.0.0.2"
 	j=1
-	while [ $j != $4 ];
+	while [ $j != $(($4+1)) ];
 	do
         	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
        		j=$(($j+1))

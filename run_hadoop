@@ -24,7 +24,7 @@ fi
 
 
 if [ $2 == 0 ]; then
-	while [ $j != $5 ];
+	while [ $j != $(($5+1)) ];
 	do
 		MASTER_COMMAND="$MASTER_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
 		j=$(($j+1))
@@ -38,7 +38,7 @@ while [ $i != $(($4+1)) ];
 do
 	SLAVE_COMMAND="$SLAVE_FRONT slave$i --network $1 --ip $IP$(($i+2)) --memory 6g --storage-opt size=300G --add-host=master:10.0.0.2"
 	j=1
-	while [ $j != $5 ];
+	while [ $j != $(($5+1)) ];
 	do
         	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
        		j=$(($j+1))
