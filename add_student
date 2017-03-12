@@ -8,11 +8,12 @@ ADDHOST='--add-host='
 IP="10.0.0."
 STUDENTIP10="10.0.0.10"
 STUDENTIP1="10.0.0.1"
-i=1
-j=1
-k=1
-l=1
-m=2
+
+numOfContaiers=1
+numOfAddHosts=1
+numOfCores=1
+coreNumber=1
+portNumber=2
 
 if [[ -z "$4" ]]; then
 	echo "format is wrong"
@@ -23,34 +24,34 @@ if [[ -z "$4" ]]; then
 fi
 	
 
-i=$2
-while [ $i != $(($3+1)) ];
+numOfContaiers=$2
+while [ $numOfContaiers != $(($3+1)) ];
 do
-	 if [ $i -lt 10 ]; then
-                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP10$i --memory 2g --add-host=master:10.0.0.2"
+	 if [ $numOfContaiers -lt 10 ]; then
+                SLAVE_COMMAND="$STUDENT_FRONT student$numOfContaiers --network $1 --ip $STUDENTIP10$numOfContaiers --memory 2g --add-host=master:10.0.0.2"
         else
-                SLAVE_COMMAND="$STUDENT_FRONT student$i --network $1 --ip $STUDENTIP1$i --memory 2g --add-host=master:10.0.0.2"
+                SLAVE_COMMAND="$STUDENT_FRONT student$numOfContaiers --network $1 --ip $STUDENTIP1$numOfContaiers --memory 2g --add-host=master:10.0.0.2"
         fi
 
-	j=1
-	while [ $j != $(($4+1)) ];
+	numOfAddHosts=1
+	while [ $numOfAddHosts != $(($4+1)) ];
 	do
-        	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$j:$IP$(($j+2))"
-       		j=$(($j+1))
+        	SLAVE_COMMAND="$SLAVE_COMMAND $ADDHOST$SLAVE$numOfAddHosts:$IP$(($numOfAddHosts+2))"
+       		numOfAddHosts=$(($numOfAddHosts+1))
 	done
 	
-	k=1
-	SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($l-1))*2))+55))"
-	while [ $k != 2 ];
+	numOfCores=1
+	SLAVE_COMMAND="$SLAVE_COMMAND --cpuset-cpus=$(($(($(($coreNumber-1))*2))+55))"
+	while [ $numOfCores != 2 ];
 	do
-		SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($l-1))*2))+55-$k))"		
-		k=$(($k+1))
+		SLAVE_COMMAND="$SLAVE_COMMAND,$(($(($(($coreNumber-1))*2))+55-$numOfCores))"		
+		numOfCores=$(($numOfCores+1))
 	done
 
-	$SLAVE_COMMAND -p 2200$m:2200$m --storage-opt size=500G $COMMAND_LAST
+	$SLAVE_COMMAND -p 2200$portNumber:2200$portNumber --storage-opt size=500G $COMMAND_LAST
 	SLAVE_COMMAND=''
-	i=$(($i+1))
-	l=$(($l-1))
-	m=$(($m+1))
+	numOfContaiers=$(($numOfContaiers+1))
+	coreNumber=$(($coreNumber-1))
+	portNumber=$(($portNumber+1))
 done
 
