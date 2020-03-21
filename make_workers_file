@@ -1,0 +1,20 @@
+#! /bin/bash
+
+#Worker generator
+CONTAINER_START_INDEX=$1
+CONTAINER_END_INDEX=$2
+ADD_SLAVE=""
+RESULT=""
+SLAVE_NAME="slave"
+
+NUM_OF_CONTAINERS=$CONTAINER_START_INDEX
+
+WORKERS_FILE="\$HADOOP_HOME/etc/hadoop/workers"
+while [ $NUM_OF_CONTAINERS -lt $(($CONTAINER_END_INDEX+1)) ];
+do
+        ADD_SLAVE="$SLAVE_NAME$NUM_OF_CONTAINERS'\'n"
+        RESULT="$RESULT$ADD_SLAVE"
+        NUM_OF_CONTAINERS=$(($NUM_OF_CONTAINERS+1))
+done
+
+docker exec master bash -c "echo -e $RESULT > $WORKERS_FILE"

@@ -1,0 +1,10 @@
+[localhost]
+localhost
+[master]
+bd-1
+[slave1]
+bd-1
+[slave2]
+bd-2
+[slave3]
+bd-3

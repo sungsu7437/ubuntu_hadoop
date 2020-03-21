@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  tasks:
+  - name: build docker image
+    command: docker build -t ubuntu_hadoop .
+    args:
+      chdir: /opt/docker
+
+  - name: create tag to image
+    command: docker tag ubuntu_hadoop sungsu7437/ubuntu_hadoop
+
+  - name: push image on to dockerhub
+    command: docker push sungsu7437/ubuntu_hadoop
+
+  - name: remove docker images from ansible container
+    command: docker rmi ubuntu_hadoop:latest sungsu7437/ubuntu_hadoop
+    ignore_errors: yes

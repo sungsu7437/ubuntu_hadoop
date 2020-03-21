@@ -1,0 +1,80 @@
+---
+- hosts: master
+  tasks:
+    - name: stop master container
+      command: docker stop master
+      ignore_errors: yes
+
+    - name: remove master container
+      command: docker rm master
+      ignore_errors: yes
+
+    - name: remove docker image
+      command: docker rmi sungsu7437/ubuntu-hadoop
+      ignore_errors: yes
+   
+    - name: pull docker image from docker hub
+      command: docker pull sungsu7437/ubuntu-hadoop:latest
+
+    - name: create master using ubuntu-hadoop
+      command: docker run -d --name master --network hadoop-network sungsu7437/ubuntu-hadoop:latest
+
+- hosts: slave1
+  tasks:
+    - name: stop slave1 container
+      command: docker stop slave1
+      ignore_errors: yes
+
+    - name: remove slave1 container
+      command: docker rm slave1
+      ignore_errors: yes
+
+    - name: remove docker image
+      command: docker rmi sungsu7437/ubuntu-hadoop
+      ignore_errors: yes
+
+    - name: pull docker image from docker hub
+      command: docker pull sungsu7437/ubuntu-hadoop:latest
+
+    - name: create master using ubuntu-hadoop
+      command: docker run -d --name slave1 --network hadoop-network sungsu7437/ubuntu-hadoop:latest
+
+- hosts: slave2
+  tasks:
+    - name: stop slave container
+      command: docker stop slave2
+      ignore_errors: yes
+
+    - name: remove slave2 container
+      command: docker rm slave2
+      ignore_errors: yes
+
+    - name: remove docker image
+      command: docker rmi sungsu7437/ubuntu-hadoop
+      ignore_errors: yes
+
+    - name: pull docker image from docker hub
+      command: docker pull sungsu7437/ubuntu-hadoop:latest
+
+    - name: create master using ubuntu-hadoop
+      command: docker run -d --name slave2 --network hadoop-network sungsu7437/ubuntu-hadoop:latest
+
+- hosts: slave3
+  tasks:
+    - name: stop slave container
+      command: docker stop slave3
+      ignore_errors: yes
+
+    - name: remove slave3 container
+      command: docker rm slave3
+      ignore_errors: yes
+
+    - name: remove docker image
+      command: docker rmi sungsu7437/ubuntu-hadoop
+      ignore_errors: yes
+
+    - name: pull docker image from docker hub
+      command: docker pull sungsu7437/ubuntu-hadoop:latest
+
+    - name: create master using ubuntu-hadoop
+      command: docker run -d --name slave3 --network hadoop-network sungsu7437/ubuntu-hadoop:latest
